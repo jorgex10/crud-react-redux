@@ -11,33 +11,11 @@ import {
   Title,
 } from "@tremor/react";
 
-const users: {
-  id: string;
-  name: string;
-  email: string;
-  github: string;
-}[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    github: "jorgex10",
-  },
-  {
-    id: "2",
-    name: "Lisa Smith",
-    email: "lisa@example.com",
-    github: "jjercx",
-  },
-  {
-    id: "3",
-    name: "Peter One",
-    email: "peter@example.com",
-    github: "midudev",
-  },
-];
+import { useAppSelector } from "../hooks/store";
 
 export default function ListOfUsers() {
+  const users = useAppSelector((state) => state.users);
+
   return (
     <Card>
       <Title>
@@ -46,27 +24,17 @@ export default function ListOfUsers() {
       </Title>
       <Table className="mt-8">
         <TableHead>
-          <TableRow className="border-b border-tremor-border dark:border-dark-tremor-border">
-            <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
-              Id
-            </TableHeaderCell>
-            <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
-              Name
-            </TableHeaderCell>
-            <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
-              Email
-            </TableHeaderCell>
-            <TableHeaderCell className="text-tremor-content-strong dark:text-dark-tremor-content-strong">
-              Actions
-            </TableHeaderCell>
+          <TableRow>
+            <TableHeaderCell>Id</TableHeaderCell>
+            <TableHeaderCell>Name</TableHeaderCell>
+            <TableHeaderCell>Email</TableHeaderCell>
+            <TableHeaderCell>Actions</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {users.map((item) => (
             <TableRow key={item.id}>
-              <TableCell className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-                {item.id}
-              </TableCell>
+              <TableCell>{item.id}</TableCell>
               <TableCell style={{ display: "flex", alignItems: "center" }}>
                 <img
                   style={{
