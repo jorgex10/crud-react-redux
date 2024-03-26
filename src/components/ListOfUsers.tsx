@@ -12,9 +12,11 @@ import {
 } from "@tremor/react";
 
 import { useAppSelector } from "../hooks/store";
+import { useUserActions } from "../hooks/useUserActions";
 
 export default function ListOfUsers() {
   const users = useAppSelector((state) => state.users);
+  const { removeUser } = useUserActions();
 
   return (
     <Card>
@@ -53,7 +55,7 @@ export default function ListOfUsers() {
                 <button type="button">
                   <RiSettings5Line className="h-8 w-8" aria-hidden={true} />
                 </button>
-                <button type="button">
+                <button onClick={() => removeUser(item.id)} type="button">
                   <RiDeleteBin7Line className="h-8 w-8" aria-hidden={true} />
                 </button>
               </TableCell>
