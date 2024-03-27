@@ -1,14 +1,12 @@
-import { Badge, Button, Card, TextInput, Title } from "@tremor/react";
+import { Button, Card, TextInput, Title } from "@tremor/react";
 
 function FormUser({
   title,
   onSubmit,
-  result,
   buttonSubmitLabel,
 }: {
   title: string;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
-  result: string | null;
   buttonSubmitLabel: string;
 }) {
   return (
@@ -61,12 +59,6 @@ function FormUser({
           >
             {buttonSubmitLabel}
           </Button>
-        </div>
-        <div className="flex items-center justify-center space-x-4">
-          <span style={{ marginTop: "12px" }}>
-            {result === "ok" && <Badge color="green">Saved!</Badge>}
-            {result === "ko" && <Badge color="red">Error on fields!</Badge>}
-          </span>
         </div>
       </form>
     </Card>
