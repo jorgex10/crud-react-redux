@@ -7,13 +7,11 @@ import CreateUser from "./components/CreateUser";
 
 function App() {
   return (
-    <div className="container">
-      <Provider store={store}>
-        <ListOfUsers />
-        <CreateUser />
-        <Toaster richColors />
-      </Provider>
-    </div>
+    <Provider store={store}>
+      <ListOfUsers />
+      <CreateUser />
+      <Toaster richColors />
+    </Provider>
   );
 }
 
