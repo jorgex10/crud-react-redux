@@ -6,6 +6,8 @@ import {
 } from "@reduxjs/toolkit";
 
 import usersReducer, { rollbackUser } from "./users/slice";
+import uiReducer from "./ui/slice";
+
 import { toast } from "sonner";
 
 const persistanceLocalStorage: Middleware = (store) => (next) => (action) => {
@@ -45,6 +47,7 @@ const syncWithDatabase: Middleware = (store) => (next) => (action) => {
 export const store = configureStore({
   reducer: {
     users: usersReducer,
+    ui: uiReducer,
   },
   middleware: () => new Tuple(persistanceLocalStorage, syncWithDatabase),
 });

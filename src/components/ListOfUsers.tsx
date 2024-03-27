@@ -1,7 +1,7 @@
 import { RiDeleteBin7Line, RiSettings5Line } from "@remixicon/react";
 import {
   Badge,
-  Card,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -13,17 +13,38 @@ import {
 
 import { useAppSelector } from "../hooks/store";
 import { useUserActions } from "../hooks/useUserActions";
+import CreateUser from "./CreateUser";
+import { useUiActions } from "../hooks/useUiActions";
 
 export default function ListOfUsers() {
   const users = useAppSelector((state) => state.users);
+  const showAddUser = useAppSelector((state) => state.ui.showAddUser);
   const { removeUser } = useUserActions();
+  const { showAddUserBlock } = useUiActions();
+
+  const handleAddUser = () => {
+    showAddUserBlock();
+  };
 
   return (
-    <Card>
-      <Title>
-        Users
-        <Badge style={{ marginLeft: "8px" }}>{users.length}</Badge>
-      </Title>
+    <>
+      <div className="sm:flex sm:items-center sm:justify-between sm:space-x-10">
+        <div>
+          <Title className="text-2xl font-semibold flex">
+            Users
+            <Badge style={{ marginLeft: "8px" }}>{users.length}</Badge>
+          </Title>
+          <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
+            Overview of all users within your organization.
+          </p>
+        </div>
+        <Button onClick={handleAddUser} type="button">
+          Add User
+        </Button>
+      </div>
+
+      {showAddUser && <CreateUser />}
+
       <Table className="mt-8">
         <TableHead>
           <TableRow>
@@ -63,6 +84,6 @@ export default function ListOfUsers() {
           ))}
         </TableBody>
       </Table>
-    </Card>
+    </>
   );
 }

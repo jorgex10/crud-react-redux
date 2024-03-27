@@ -1,5 +1,7 @@
 import { Button, Card, TextInput, Title } from "@tremor/react";
 
+import { useUiActions } from "../hooks/useUiActions";
+
 function FormUser({
   title,
   onSubmit,
@@ -9,6 +11,12 @@ function FormUser({
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   buttonSubmitLabel: string;
 }) {
+  const { hideAddUserBlock } = useUiActions();
+
+  const handleCancel = () => {
+    hideAddUserBlock();
+  };
+
   return (
     <Card style={{ marginTop: "16px" }}>
       <Title>{title}</Title>
@@ -49,6 +57,7 @@ function FormUser({
         <div className="flex items-center justify-center space-x-4 mt-6">
           <button
             type="button"
+            onClick={handleCancel}
             className="whitespace-nowrap rounded-tremor-small px-4 py-2.5 text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
           >
             Cancel

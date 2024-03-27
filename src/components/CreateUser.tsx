@@ -2,9 +2,11 @@ import { toast } from "sonner";
 
 import { useUserActions } from "../hooks/useUserActions";
 import FormUser from "./FormUser";
+import { useUiActions } from "../hooks/useUiActions";
 
 function CreateUser() {
   const { addUser } = useUserActions();
+  const { hideAddUserBlock } = useUiActions();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +24,7 @@ function CreateUser() {
 
     addUser({ name, email, github });
     toast.success("User Created!");
-
+    hideAddUserBlock();
     form.reset();
   };
 
