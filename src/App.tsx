@@ -1,13 +1,13 @@
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
 import { store } from "./store";
-
-import ListOfUsers from "./components/ListOfUsers";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
 function App() {
   return (
     <Provider store={store}>
-      <ListOfUsers />
+      <RouterProvider router={router} />
       <Toaster richColors />
     </Provider>
   );
