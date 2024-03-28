@@ -24,13 +24,13 @@ const DEFAULT_STATE = [
 export type UserId = string;
 
 export interface User {
-  name: string;
-  email: string;
-  github: string;
+  name?: string;
+  email?: string;
+  github?: string;
 }
 
 export interface UserWithId extends User {
-  id: UserId;
+  id?: UserId;
 }
 
 const initialState: UserWithId[] = (() => {
@@ -46,6 +46,18 @@ export const usersSlice = createSlice({
     addNewUser: (state, action: PayloadAction<User>) => {
       const id = crypto.randomUUID();
       return [...state, { id, ...action.payload }];
+    },
+
+    editExistingUser: (state, action: PayloadAction<UserWithId>) => {
+      const userIndex = state.findIndex(
+        (user) => user.id === action.payload.id
+      );
+
+      if (userIndex > -1) {
+        state[userIndex].name = action.payload.name;
+        state[userIndex].email = action.payload.email;
+        state[userIndex].github = action.payload.github;
+      }
     },
 
     deleteUserById: (state, action: PayloadAction<UserId>) => {
@@ -65,6 +77,7 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { addNewUser, deleteUserById, rollbackUser } = usersSlice.actions;
+export const { addNewUser, editExistingUser, deleteUserById, rollbackUser } =
+  usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -15,15 +15,25 @@ import { useAppSelector } from "../hooks/store";
 import { useUserActions } from "../hooks/useUserActions";
 import CreateUser from "./CreateUser";
 import { useUiActions } from "../hooks/useUiActions";
+import { UserId } from "../store/users/slice";
+import { useState } from "react";
+import EditUser from "./EditUser";
 
 export default function ListOfUsers() {
   const users = useAppSelector((state) => state.users);
   const showAddUser = useAppSelector((state) => state.ui.showAddUser);
   const { removeUser } = useUserActions();
   const { showAddUserBlock } = useUiActions();
+  const [updateUserId, setUpdateUserId] = useState<string | null>(null);
 
   const handleAddUser = () => {
+    setUpdateUserId(null);
     showAddUserBlock();
+  };
+
+  const handleEditUser = (userId: UserId) => {
+    showAddUserBlock();
+    setUpdateUserId(userId);
   };
 
   return (
@@ -43,7 +53,8 @@ export default function ListOfUsers() {
         </Button>
       </div>
 
-      {showAddUser && <CreateUser />}
+      {showAddUser && !updateUserId && <CreateUser />}
+      {showAddUser && updateUserId && <EditUser userId={updateUserId} />}
 
       <Table className="mt-8">
         <TableHead>
@@ -73,10 +84,10 @@ export default function ListOfUsers() {
               </TableCell>
               <TableCell>{item.email}</TableCell>
               <TableCell>
-                <button type="button">
+                <button onClick={() => handleEditUser(item.id!)} type="button">
                   <RiSettings5Line className="h-8 w-8" aria-hidden={true} />
                 </button>
-                <button onClick={() => removeUser(item.id)} type="button">
+                <button onClick={() => removeUser(item.id!)} type="button">
                   <RiDeleteBin7Line className="h-8 w-8" aria-hidden={true} />
                 </button>
               </TableCell>

@@ -33,6 +33,7 @@ function CreateUser() {
       title="Create New User"
       onSubmit={handleSubmit}
       buttonSubmitLabel="Create User"
+      userId={""}
     />
   );
 }

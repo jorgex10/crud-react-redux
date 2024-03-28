@@ -1,20 +1,53 @@
 import { Button, Card, TextInput, Title } from "@tremor/react";
 
 import { useUiActions } from "../hooks/useUiActions";
+import { User, UserId } from "../store/users/slice";
+import { useAppSelector } from "../hooks/store";
+import { useEffect, useState } from "react";
 
 function FormUser({
   title,
   onSubmit,
   buttonSubmitLabel,
+  userId,
 }: {
   title: string;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   buttonSubmitLabel: string;
+  userId: UserId;
 }) {
   const { hideAddUserBlock } = useUiActions();
+  const users = useAppSelector((state) => state.users);
+
+  const [userValues, setUserValues] = useState<User>({
+    name: "",
+    email: "",
+    github: "",
+  });
+
+  useEffect(() => {
+    const user = users.find((user) => user.id === userId);
+    if (user)
+      setUserValues({
+        name: user.name,
+        email: user.email,
+        github: user.github,
+      });
+  }, [users, userId]);
 
   const handleCancel = () => {
     hideAddUserBlock();
+  };
+
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setUserValues((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   };
 
   return (
@@ -28,6 +61,8 @@ function FormUser({
               type="text"
               id="name"
               name="name"
+              value={userValues.name}
+              onChange={onChangeHandler}
               autoComplete="Name"
               placeholder="Name"
               className="mt-2"
@@ -38,6 +73,8 @@ function FormUser({
               type="email"
               id="email"
               name="email"
+              value={userValues.email}
+              onChange={onChangeHandler}
               autoComplete="email"
               placeholder="Email"
               className="mt-2"
@@ -48,6 +85,8 @@ function FormUser({
               type="text"
               id="github"
               name="github"
+              value={userValues.github}
+              onChange={onChangeHandler}
               autoComplete="Github"
               placeholder="Github"
               className="mt-2"
