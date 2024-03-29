@@ -1,8 +1,8 @@
 import { Button, Card, TextInput, Title } from "@tremor/react";
 
-import { useUiActions } from "../hooks/useUiActions";
-import { User, UserId } from "../store/users/slice";
-import { useAppSelector } from "../hooks/store";
+import { useUiActions } from "../../hooks/useUiActions";
+import { User, UserId } from "../../store/users/slice";
+import { useAppSelector } from "../../hooks/store";
 import { useEffect, useState } from "react";
 
 function FormUser({

@@ -1,8 +1,8 @@
 import { toast } from "sonner";
 
-import { useUserActions } from "../hooks/useUserActions";
+import { useUserActions } from "../../hooks/useUserActions";
 import FormUser from "./FormUser";
-import { useUiActions } from "../hooks/useUiActions";
+import { useUiActions } from "../../hooks/useUiActions";
 
 function CreateUser() {
   const { addUser } = useUserActions();

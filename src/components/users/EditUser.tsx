@@ -1,9 +1,9 @@
 import { toast } from "sonner";
 
-import { useUserActions } from "../hooks/useUserActions";
+import { useUserActions } from "../../hooks/useUserActions";
 import FormUser from "./FormUser";
-import { useUiActions } from "../hooks/useUiActions";
-import { UserId } from "../store/users/slice";
+import { useUiActions } from "../../hooks/useUiActions";
+import { UserId } from "../../store/users/slice";
 
 function EditUser({ userId }: { userId: UserId }) {
   const { editUser } = useUserActions();

@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import RootPage from "./pages/RootPage";
 import Page404 from "./pages/Page404";
-import ListOfUsers from "./components/ListOfUsers";
+import UsersPage from "./pages/UsersPage";
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ListOfUsers />,
+        element: <UsersPage />,
       },
       {
         path: "/react-query",

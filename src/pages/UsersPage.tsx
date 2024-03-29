@@ -13,13 +13,13 @@ import {
 
 import { useAppSelector } from "../hooks/store";
 import { useUserActions } from "../hooks/useUserActions";
-import CreateUser from "./CreateUser";
+import CreateUser from "../components/users/CreateUser";
 import { useUiActions } from "../hooks/useUiActions";
 import { UserId } from "../store/users/slice";
 import { useState } from "react";
-import EditUser from "./EditUser";
+import EditUser from "../components/users/EditUser";
 
-export default function ListOfUsers() {
+export default function UsersPage() {
   const users = useAppSelector((state) => state.users);
   const showAddUser = useAppSelector((state) => state.ui.showAddUser);
   const { removeUser } = useUserActions();
