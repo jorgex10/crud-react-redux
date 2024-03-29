@@ -39,7 +39,7 @@ function Navbar() {
                 className={({ isActive }) => (isActive ? ACTIVE_CLASS : "")}
                 end
               >
-                Reac Query
+                React Query
               </NavLink>
             </li>
             <li>
