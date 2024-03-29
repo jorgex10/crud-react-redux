@@ -45,7 +45,8 @@ export default function UsersPage() {
             <Badge style={{ marginLeft: "8px" }}>{users.length}</Badge>
           </Title>
           <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
-            Overview of all users within your organization.
+            Overview of all users within your organization using Redux Toolkit
+            and Custom Hooks.
           </p>
         </div>
         <Button onClick={handleAddUser} type="button">
