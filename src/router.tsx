@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import RootPage from "./pages/RootPage";
 import Page404 from "./pages/Page404";
 import UsersPage from "./pages/UsersPage";
+import AdminsPage from "./pages/AdminsPage";
 
 export const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/react-query",
-        element: <h1>ReactQuery Page</h1>,
+        element: <AdminsPage />,
       },
     ],
   },
