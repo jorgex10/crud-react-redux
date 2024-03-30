@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Badge, Button, Title } from "@tremor/react";
 import { type Admin } from "../types";
@@ -8,6 +8,7 @@ function AdminsPage() {
   const [data, setData] = useState<Admin>([]);
   const [showColors, setShowColors] = useState(false);
   const [sortByCountry, setSortByCountry] = useState(false);
+  const originalData = useRef<Admin>([]);
 
   const toggleColors = () => {
     setShowColors((prev) => !prev);
@@ -40,6 +41,22 @@ function AdminsPage() {
           }
         )
       );
+      originalData.current = resData.results.map(
+        (item: {
+          login: { uuid: string };
+          picture: { thumbnail: string };
+          name: { first: string; last: string };
+          location: { country: string };
+        }) => {
+          return {
+            id: item.login.uuid,
+            photo: item.picture.thumbnail,
+            firstName: item.name.first,
+            lastName: item.name.last,
+            country: item.location.country,
+          };
+        }
+      );
     };
 
     getData();
@@ -53,6 +70,10 @@ function AdminsPage() {
 
   const deleteHandler = (adminId: string) => {
     setData((prevData) => prevData.filter((item) => item.id !== adminId));
+  };
+
+  const resetHandler = () => {
+    setData(originalData.current);
   };
 
   return (
@@ -75,6 +96,7 @@ function AdminsPage() {
         <Button onClick={toggleSortByCountry}>
           {sortByCountry ? "Not Sort by Country" : "Sort by Country"}
         </Button>
+        <Button onClick={resetHandler}>Restore deleted admins</Button>
       </header>
 
       <AdminsList
