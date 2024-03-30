@@ -18,8 +18,6 @@ function EditUser({ userId }: { userId: UserId }) {
     const email = form.get("email") as string;
     const github = form.get("github") as string;
 
-    console.log({ name, email, github });
-
     if (!name || !email || !github) {
       return toast.error("Error on fields!");
     }

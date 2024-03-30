@@ -16,9 +16,10 @@ const FILL_COLOR_CLASSES =
 interface Props {
   data: Admin;
   showColors: boolean;
+  onDelete: (adminId: string) => void;
 }
 
-function AdminsList({ data, showColors }: Props) {
+function AdminsList({ data, showColors, onDelete }: Props) {
   return (
     <Table className="mt-8">
       <TableHead>
@@ -52,7 +53,7 @@ function AdminsList({ data, showColors }: Props) {
             <TableCell>{item.lastName}</TableCell>
             <TableCell>{item.country}</TableCell>
             <TableCell>
-              <button onClick={() => {}} type="button">
+              <button onClick={() => onDelete(item.id)} type="button">
                 <RiDeleteBin7Line className="h-8 w-8" aria-hidden={true} />
               </button>
             </TableCell>

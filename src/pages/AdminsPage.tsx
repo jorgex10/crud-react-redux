@@ -51,6 +51,10 @@ function AdminsPage() {
       })
     : data;
 
+  const deleteHandler = (adminId: string) => {
+    setData((prevData) => prevData.filter((item) => item.id !== adminId));
+  };
+
   return (
     <>
       <div className="sm:flex sm:items-center sm:justify-between sm:space-x-10">
@@ -73,7 +77,11 @@ function AdminsPage() {
         </Button>
       </header>
 
-      <AdminsList data={sortedData} showColors={showColors} />
+      <AdminsList
+        data={sortedData}
+        showColors={showColors}
+        onDelete={deleteHandler}
+      />
     </>
   );
 }
