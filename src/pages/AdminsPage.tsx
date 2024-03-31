@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { Badge, Button, Title } from "@tremor/react";
+import { Badge, Button, TextInput, Title } from "@tremor/react";
 import { type Admin } from "../types";
 import AdminsList from "../components/admins/AdminsList";
 
@@ -8,6 +8,7 @@ function AdminsPage() {
   const [data, setData] = useState<Admin>([]);
   const [showColors, setShowColors] = useState(false);
   const [sortByCountry, setSortByCountry] = useState(false);
+  const [countryValue, setCountryValue] = useState("");
   const originalData = useRef<Admin>([]);
 
   const toggleColors = () => {
@@ -62,11 +63,17 @@ function AdminsPage() {
     getData();
   }, []);
 
+  const filteredData = countryValue
+    ? data.filter((item) =>
+        item.country.toLowerCase().includes(countryValue.toLowerCase())
+      )
+    : data;
+
   const sortedData = sortByCountry
-    ? data.toSorted((a, b) => {
+    ? filteredData.toSorted((a, b) => {
         return a.country.localeCompare(b.country);
       })
-    : data;
+    : filteredData;
 
   const deleteHandler = (adminId: string) => {
     setData((prevData) => prevData.filter((item) => item.id !== adminId));
@@ -74,6 +81,10 @@ function AdminsPage() {
 
   const resetHandler = () => {
     setData(originalData.current);
+  };
+
+  const filterHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCountryValue(event.target.value);
   };
 
   return (
@@ -97,6 +108,12 @@ function AdminsPage() {
           {sortByCountry ? "Not Sort by Country" : "Sort by Country"}
         </Button>
         <Button onClick={resetHandler}>Restore deleted admins</Button>
+        <TextInput
+          id="country"
+          name="country"
+          placeholder="Filter by country"
+          onChange={filterHandler}
+        />
       </header>
 
       <AdminsList
