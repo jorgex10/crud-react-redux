@@ -64,8 +64,6 @@ function AdminsPage() {
   }, []);
 
   const filteredData = useMemo(() => {
-    console.log("calculate filtered admins");
-
     return countryValue
       ? data.filter((item) =>
           item.country.toLowerCase().includes(countryValue.toLowerCase())
@@ -74,8 +72,6 @@ function AdminsPage() {
   }, [data, countryValue]);
 
   const sortedData = useMemo(() => {
-    console.log("calculate sorted admins");
-
     return sortByCountry
       ? filteredData.toSorted((a, b) => {
           return a.country.localeCompare(b.country);
