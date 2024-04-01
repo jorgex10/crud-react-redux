@@ -11,3 +11,10 @@ export type Admin = {
   lastName: string;
   country: string;
 }[];
+
+export enum SortBy {
+  NONE = "none",
+  FIRST = "first",
+  LAST = "last",
+  COUNTRY = "countrry",
+}

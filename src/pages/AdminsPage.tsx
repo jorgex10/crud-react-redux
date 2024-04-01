@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Badge, Button, TextInput, Title } from "@tremor/react";
-import { type Admin } from "../types";
+import { SortBy, type Admin } from "../types.d";
 import AdminsList from "../components/admins/AdminsList";
 
 function AdminsPage() {
   const [data, setData] = useState<Admin>([]);
   const [showColors, setShowColors] = useState(false);
-  const [sortByCountry, setSortByCountry] = useState(false);
+  const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
   const [countryValue, setCountryValue] = useState("");
   const originalData = useRef<Admin>([]);
 
@@ -16,7 +16,9 @@ function AdminsPage() {
   };
 
   const toggleSortByCountry = () => {
-    setSortByCountry((prev) => !prev);
+    const newSortingValue =
+      sorting !== SortBy.COUNTRY ? SortBy.COUNTRY : SortBy.NONE;
+    setSorting(newSortingValue);
   };
 
   useEffect(() => {
@@ -72,12 +74,22 @@ function AdminsPage() {
   }, [data, countryValue]);
 
   const sortedData = useMemo(() => {
-    return sortByCountry
-      ? filteredData.toSorted((a, b) => {
-          return a.country.localeCompare(b.country);
-        })
-      : filteredData;
-  }, [filteredData, sortByCountry]);
+    if (sorting === SortBy.COUNTRY) {
+      return filteredData.toSorted((a, b) =>
+        a.country.localeCompare(b.country)
+      );
+    } else if (sorting === SortBy.FIRST) {
+      return filteredData.toSorted((a, b) =>
+        a.firstName.localeCompare(b.firstName)
+      );
+    } else if (sorting === SortBy.LAST) {
+      return filteredData.toSorted((a, b) =>
+        a.lastName.localeCompare(b.lastName)
+      );
+    } else {
+      return filteredData;
+    }
+  }, [filteredData, sorting]);
 
   const deleteHandler = (adminId: string) => {
     setData((prevData) => prevData.filter((item) => item.id !== adminId));
@@ -89,6 +101,10 @@ function AdminsPage() {
 
   const filterHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCountryValue(event.target.value);
+  };
+
+  const handleChangeSort = (sort: SortBy) => {
+    setSorting(sort);
   };
 
   return (
@@ -109,7 +125,9 @@ function AdminsPage() {
       <header className="mt-8 flex gap-5 justify-center">
         <Button onClick={toggleColors}>Apply color</Button>
         <Button onClick={toggleSortByCountry}>
-          {sortByCountry ? "Not Sort by Country" : "Sort by Country"}
+          {sorting !== SortBy.COUNTRY
+            ? "Sort by Country"
+            : "Not Sort by Country"}
         </Button>
         <Button onClick={resetHandler}>Restore deleted admins</Button>
         <TextInput
@@ -124,6 +142,7 @@ function AdminsPage() {
         data={sortedData}
         showColors={showColors}
         onDelete={deleteHandler}
+        onFilterColumns={handleChangeSort}
       />
     </>
   );

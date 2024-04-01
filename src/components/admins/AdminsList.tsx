@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@tremor/react";
 
-import { type Admin } from "../../types";
+import { SortBy, type Admin } from "../../types.d";
 
 const FILL_COLOR_CLASSES =
   "even:bg-tremor-background-muted even:dark:bg-dark-tremor-background-muted";
@@ -17,16 +17,27 @@ interface Props {
   data: Admin;
   showColors: boolean;
   onDelete: (adminId: string) => void;
+  onFilterColumns: (column: SortBy) => void;
 }
 
-function AdminsList({ data, showColors, onDelete }: Props) {
+function AdminsList({ data, showColors, onDelete, onFilterColumns }: Props) {
   return (
     <Table className="mt-8">
       <TableHead>
         <TableRow>
           <TableHeaderCell>Photo</TableHeaderCell>
-          <TableHeaderCell>First Name</TableHeaderCell>
-          <TableHeaderCell>Last Name</TableHeaderCell>
+          <TableHeaderCell
+            className="cursor-pointer"
+            onClick={() => onFilterColumns(SortBy.FIRST)}
+          >
+            First Name
+          </TableHeaderCell>
+          <TableHeaderCell
+            className="cursor-pointer"
+            onClick={() => onFilterColumns(SortBy.LAST)}
+          >
+            Last Name
+          </TableHeaderCell>
           <TableHeaderCell>Country</TableHeaderCell>
           <TableHeaderCell>Actions</TableHeaderCell>
         </TableRow>
