@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Badge, Button, TextInput, Title } from "@tremor/react";
 import { type Admin } from "../types";
@@ -63,17 +63,25 @@ function AdminsPage() {
     getData();
   }, []);
 
-  const filteredData = countryValue
-    ? data.filter((item) =>
-        item.country.toLowerCase().includes(countryValue.toLowerCase())
-      )
-    : data;
+  const filteredData = useMemo(() => {
+    console.log("calculate filtered admins");
 
-  const sortedData = sortByCountry
-    ? filteredData.toSorted((a, b) => {
-        return a.country.localeCompare(b.country);
-      })
-    : filteredData;
+    return countryValue
+      ? data.filter((item) =>
+          item.country.toLowerCase().includes(countryValue.toLowerCase())
+        )
+      : data;
+  }, [data, countryValue]);
+
+  const sortedData = useMemo(() => {
+    console.log("calculate sorted admins");
+
+    return sortByCountry
+      ? filteredData.toSorted((a, b) => {
+          return a.country.localeCompare(b.country);
+        })
+      : filteredData;
+  }, [filteredData, sortByCountry]);
 
   const deleteHandler = (adminId: string) => {
     setData((prevData) => prevData.filter((item) => item.id !== adminId));
