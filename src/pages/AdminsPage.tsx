@@ -3,12 +3,22 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Badge, Button, TextInput, Title } from "@tremor/react";
 import { SortBy, type Admin } from "../types.d";
 import AdminsList from "../components/admins/AdminsList";
+import Info from "../components/Info";
+
+interface Results {
+  login: { uuid: string };
+  picture: { thumbnail: string };
+  name: { first: string; last: string };
+  location: { country: string };
+}
 
 function AdminsPage() {
   const [data, setData] = useState<Admin>([]);
   const [showColors, setShowColors] = useState(false);
   const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
   const [countryValue, setCountryValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const originalData = useRef<Admin>([]);
 
   const toggleColors = () => {
@@ -22,18 +32,14 @@ function AdminsPage() {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await fetch("https://randomuser.me/api/?results=100");
-      const resData = await response.json();
-
-      setData(
-        resData.results.map(
-          (item: {
-            login: { uuid: string };
-            picture: { thumbnail: string };
-            name: { first: string; last: string };
-            location: { country: string };
-          }) => {
+    setLoading(true);
+    fetch("https://randomuser.me/api/?results=10")
+      .then((response) => {
+        return response.json();
+      })
+      .then((resData) => {
+        setData(
+          resData.results.map((item: Results) => {
             return {
               id: item.login.uuid,
               photo: item.picture.thumbnail,
@@ -41,16 +47,9 @@ function AdminsPage() {
               lastName: item.name.last,
               country: item.location.country,
             };
-          }
-        )
-      );
-      originalData.current = resData.results.map(
-        (item: {
-          login: { uuid: string };
-          picture: { thumbnail: string };
-          name: { first: string; last: string };
-          location: { country: string };
-        }) => {
+          })
+        );
+        originalData.current = resData.results.map((item: Results) => {
           return {
             id: item.login.uuid,
             photo: item.picture.thumbnail,
@@ -58,11 +57,13 @@ function AdminsPage() {
             lastName: item.name.last,
             country: item.location.country,
           };
-        }
-      );
-    };
-
-    getData();
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(true);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredData = useMemo(() => {
@@ -122,28 +123,35 @@ function AdminsPage() {
         </div>
       </div>
 
-      <header className="mt-8 flex gap-5 justify-center">
-        <Button onClick={toggleColors}>Apply color</Button>
-        <Button onClick={toggleSortByCountry}>
-          {sorting !== SortBy.COUNTRY
-            ? "Sort by Country"
-            : "Not Sort by Country"}
-        </Button>
-        <Button onClick={resetHandler}>Restore deleted admins</Button>
-        <TextInput
-          id="country"
-          name="country"
-          placeholder="Filter by country"
-          onChange={filterHandler}
-        />
-      </header>
+      {loading && <Info>Loading ...</Info>}
+      {!loading && error && <Info>Something went wrong!</Info>}
+      {!loading && !error && data.length === 0 && <Info>No admins!</Info>}
+      {!loading && !error && data.length > 0 && (
+        <>
+          <header className="mt-8 flex gap-5 justify-center">
+            <Button onClick={toggleColors}>Apply color</Button>
+            <Button onClick={toggleSortByCountry}>
+              {sorting !== SortBy.COUNTRY
+                ? "Sort by Country"
+                : "Not Sort by Country"}
+            </Button>
+            <Button onClick={resetHandler}>Restore deleted admins</Button>
+            <TextInput
+              id="country"
+              name="country"
+              placeholder="Filter by country"
+              onChange={filterHandler}
+            />
+          </header>
 
-      <AdminsList
-        data={sortedData}
-        showColors={showColors}
-        onDelete={deleteHandler}
-        onFilterColumns={handleChangeSort}
-      />
+          <AdminsList
+            data={sortedData}
+            showColors={showColors}
+            onDelete={deleteHandler}
+            onFilterColumns={handleChangeSort}
+          />
+        </>
+      )}
     </>
   );
 }
