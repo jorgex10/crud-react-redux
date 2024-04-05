@@ -144,6 +144,8 @@ function AdminsPage() {
             />
           </header>
 
+          <h1>Jorge</h1>
+
           <AdminsList
             data={sortedData}
             showColors={showColors}
